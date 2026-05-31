@@ -144,7 +144,7 @@ To answer these questions, the pipeline was fitted and evaluated with the follow
 
 ## Results
 
-**The best score `375` for `2026` season was achieved by the Gradient Boosting Regressor with the classification by Logistic Regression.**
+**The best score `368` for `2026` season was achieved by the Gradient Boosting Regressor with the classification by Logistic Regression.**
 
 ### Analysis
 
