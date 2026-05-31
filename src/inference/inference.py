@@ -12,6 +12,7 @@ from sklearn.ensemble import (
 import logging
 from pathlib import Path
 
+
 @dataclass
 class ExperimentConfig:
     csv_path: Path
@@ -34,8 +35,12 @@ class ExperimentResults:
         return {
             "season_scores_all_nba": self.season_scores_all_nba,
             "season_scores_all_rookie": self.season_scores_all_rookie,
-            "selected_2026_players_all_nba": self.selected_2026_players_all_nba.to_dict(orient="records"),
-            "selected_2026_players_all_rookie": self.selected_2026_players_all_rookie.to_dict(orient="records"),
+            "selected_2026_players_all_nba": self.selected_2026_players_all_nba.to_dict(
+                orient="records"
+            ),
+            "selected_2026_players_all_rookie": self.selected_2026_players_all_rookie.to_dict(
+                orient="records"
+            ),
         }
 
 
@@ -62,9 +67,9 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
 
     features_to_normalize = config.features_to_normalize
     features = config.features
-    assert set(features_to_normalize).issubset(set(features)), (
-        "Features to normalize must be a subset of the features used in the model"
-    )
+    assert set(features_to_normalize).issubset(
+        set(features)
+    ), "Features to normalize must be a subset of the features used in the model"
 
     nba_all_pipeline = create_pipeline(
         base_classifier=config.base_classifier,
@@ -86,24 +91,26 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
     y_train_all_nba = df_train_all_nba["VOTES_PERCENTAGE_ALL_NBA"]
     y_train_all_rookie = df_train_all_rookie["VOTES_PERCENTAGE_ALL_ROOKIE"]
 
-    assert y_train_all_nba.notna().all(), (
-        "Target variable for ALL NBA contains NaN values"
-    )
-    assert y_train_all_rookie.notna().all(), (
-        "Target variable for ALL ROOKIE NBA contains NaN values"
-    )
-    assert (y_train_all_nba > 0).any(), (
-        "There must be at least one positive sample in ALL NBA training data"
-    )
-    assert (y_train_all_nba <= 1).all(), (
-        "Target variable values for ALL NBA must be in the range [0, 1]"
-    )
-    assert (y_train_all_rookie > 0).any(), (
+    assert (
+        y_train_all_nba.notna().all()
+    ), "Target variable for ALL NBA contains NaN values"
+    assert (
+        y_train_all_rookie.notna().all()
+    ), "Target variable for ALL ROOKIE NBA contains NaN values"
+    assert (
+        y_train_all_nba > 0
+    ).any(), "There must be at least one positive sample in ALL NBA training data"
+    assert (
+        y_train_all_nba <= 1
+    ).all(), "Target variable values for ALL NBA must be in the range [0, 1]"
+    assert (
+        y_train_all_rookie > 0
+    ).any(), (
         "There must be at least one positive sample in ALL ROOKIE NBA training data"
     )
-    assert (y_train_all_rookie <= 1).all(), (
-        "Target variable values for ALL ROOKIE NBA must be in the range [0, 1]"
-    )
+    assert (
+        y_train_all_rookie <= 1
+    ).all(), "Target variable values for ALL ROOKIE NBA must be in the range [0, 1]"
 
     nba_all_pipeline.fit(df_train_all_nba, y_train_all_nba)
     nba_rookie_pipeline.fit(df_train_all_rookie, y_train_all_rookie)
@@ -117,7 +124,12 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
         total = 0
         for award, df, y, pipeline in [
             ("ALL NBA", df_train_all_nba, y_train_all_nba, nba_all_pipeline),
-            ("ALL ROOKIE NBA", df_train_all_rookie, y_train_all_rookie, nba_rookie_pipeline),
+            (
+                "ALL ROOKIE NBA",
+                df_train_all_rookie,
+                y_train_all_rookie,
+                nba_rookie_pipeline,
+            ),
         ]:
             season_mask = df["YEAR"] == year
             X_season = df[season_mask]
@@ -141,31 +153,33 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
     y_val_all_nba = df_val_all_nba["VOTES_PERCENTAGE_ALL_NBA"]
     y_val_all_rookie = df_val_all_rookie["VOTES_PERCENTAGE_ALL_ROOKIE"]
 
-    assert len(df_val_all_nba) == len(y_val_all_nba), (
-        "Mismatch in number of samples for ALL NBA validation data"
-    )
-    assert len(df_val_all_rookie) == len(y_val_all_rookie), (
-        "Mismatch in number of samples for ALL ROOKIE NBA validation data"
-    )
+    assert len(df_val_all_nba) == len(
+        y_val_all_nba
+    ), "Mismatch in number of samples for ALL NBA validation data"
+    assert len(df_val_all_rookie) == len(
+        y_val_all_rookie
+    ), "Mismatch in number of samples for ALL ROOKIE NBA validation data"
 
-    assert y_val_all_nba.notna().all(), (
-        "Validation target variable for ALL NBA contains NaN values"
-    )
-    assert y_val_all_rookie.notna().all(), (
-        "Validation target variable for ALL ROOKIE NBA contains NaN values"
-    )
-    assert (y_val_all_nba > 0).any(), (
-        "There must be at least one positive sample in ALL NBA validation data"
-    )
-    assert (y_val_all_nba <= 1).all(), (
-        "Validation target variable values for ALL NBA must be in the range [0, 1]"
-    )
-    assert (y_val_all_rookie > 0).any(), (
+    assert (
+        y_val_all_nba.notna().all()
+    ), "Validation target variable for ALL NBA contains NaN values"
+    assert (
+        y_val_all_rookie.notna().all()
+    ), "Validation target variable for ALL ROOKIE NBA contains NaN values"
+    assert (
+        y_val_all_nba > 0
+    ).any(), "There must be at least one positive sample in ALL NBA validation data"
+    assert (
+        y_val_all_nba <= 1
+    ).all(), "Validation target variable values for ALL NBA must be in the range [0, 1]"
+    assert (
+        y_val_all_rookie > 0
+    ).any(), (
         "There must be at least one positive sample in ALL ROOKIE NBA validation data"
     )
-    assert (y_val_all_rookie <= 1).all(), (
-        "Validation target variable values for ALL ROOKIE NBA must be in the range [0, 1]"
-    )
+    assert (
+        y_val_all_rookie <= 1
+    ).all(), "Validation target variable values for ALL ROOKIE NBA must be in the range [0, 1]"
 
     df_val_results_all_nba, score_all_nba = validate_season(
         nba_all_pipeline, df_val_all_nba, y_val_all_nba, is_rookie=False
@@ -177,9 +191,9 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
     )
     season_scores_all_rookie[2026] = score_all_rookie
 
-    assert df_val_results_all_rookie["actual_vote_share"].notna().all(), (
-        "Validation results for ALL ROOKIE NBA contain NaN values in actual_vote_share"
-    )
+    assert (
+        df_val_results_all_rookie["actual_vote_share"].notna().all()
+    ), "Validation results for ALL ROOKIE NBA contain NaN values in actual_vote_share"
 
     logger.info("Validation Season 2026:")
     logger.info(f"ALL-NBA Score = {score_all_nba}")
@@ -201,7 +215,7 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
                 "actual_place",
             ]
         ]
-        logger.info("\n"+df_selected_players.to_string(index=False))
+        logger.info("\n" + df_selected_players.to_string(index=False))
 
     for place in (1, 2):
         selected_players = df_val_results_all_rookie[
@@ -218,7 +232,7 @@ def run_experiment(config: ExperimentConfig, verbose: bool = True) -> Experiment
                 "actual_place",
             ]
         ]
-        logger.info("\n"+df_selected_players.to_string(index=False))
+        logger.info("\n" + df_selected_players.to_string(index=False))
 
     return ExperimentResults(
         season_scores_all_nba=season_scores_all_nba,

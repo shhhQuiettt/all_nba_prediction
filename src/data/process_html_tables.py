@@ -1,4 +1,3 @@
-import random
 import logging
 from pathlib import Path
 import re
@@ -19,9 +18,9 @@ def validate_final_df(df: pd.DataFrame):
     # assert that all years from 1990 to 2026 are present
     expected_years = set(range(1990, 2027))
     actual_years = set(df["YEAR"].unique())
-    assert expected_years == actual_years, (
-        f"Expected years {expected_years} but found {actual_years}"
-    )
+    assert (
+        expected_years == actual_years
+    ), f"Expected years {expected_years} but found {actual_years}"
 
     # assert all year have 1 2 3 1000 places for ALL-NBA and 1 2 3 for ALL-ROOKIE
     for year in expected_years:
@@ -32,9 +31,9 @@ def validate_final_df(df: pd.DataFrame):
             else:
                 expected_places = set([1, 2, 1000])
             actual_places = set(df_year_award["PLACE"].unique())
-            assert expected_places == actual_places, (
-                f"Expected places {expected_places} for year {year} and award {award} but found {actual_places}"
-            )
+            assert (
+                expected_places == actual_places
+            ), f"Expected places {expected_places} for year {year} and award {award} but found {actual_places}"
 
     # assert that every year-place combintation has more than 5 players, but less than 8 players
     for year in expected_years:
@@ -49,9 +48,9 @@ def validate_final_df(df: pd.DataFrame):
                     & (df["PLACE"] == place)
                 ]
                 num_players = len(df_year_award_place)
-                assert num_players >= 4 and num_players <= 8, (
-                    f"Expected between 4 and 8 players for year {year}, award {award}, place {place} but found {num_players}"
-                )
+                assert (
+                    num_players >= 4 and num_players <= 8
+                ), f"Expected between 4 and 8 players for year {year}, award {award}, place {place} but found {num_players}"
 
     # assert that there are no duplicate player IDs for the same year, award, place combination
     for year in expected_years:
@@ -63,9 +62,9 @@ def validate_final_df(df: pd.DataFrame):
                     & (df["PLACE"] == place)
                 ]
                 player_ids = df_year_award_place["PLAYER_ID"].values
-                assert len(player_ids) == len(set(player_ids)), (
-                    f"Found duplicate player IDs for year {year}, award {award}, place {place}"
-                )
+                assert len(player_ids) == len(
+                    set(player_ids)
+                ), f"Found duplicate player IDs for year {year}, award {award}, place {place}"
 
 
 def find_player_id(name: str) -> int:
@@ -131,10 +130,6 @@ def find_player_id(name: str) -> int:
         )
 
     return -1
-
-    # raise ValueError(
-    #     f"Player name {name} not found in players.csv after cleaning"
-    # )
 
 
 def process_raw_df(df_raw: pd.DataFrame, rookie: bool, year: int) -> pd.DataFrame:

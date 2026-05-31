@@ -6,7 +6,6 @@ import logging
 import json
 import argparse
 
-
 RANDOM_SEED = 0xC0FFEE
 BEST_CLASSIFIER = LogisticRegression(random_state=RANDOM_SEED, max_iter=3000)
 BEST_REGRESSOR = GradientBoostingRegressor(random_state=0xC0FFEE)
@@ -17,7 +16,9 @@ def main():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    parser = argparse.ArgumentParser(description="Run the final experiment for ALL-NBA and ALL-ROOKIE predictions.")
+    parser = argparse.ArgumentParser(
+        description="Run the final experiment for ALL-NBA and ALL-ROOKIE predictions."
+    )
     parser.add_argument(
         "--output-path",
         type=str,
@@ -95,6 +96,7 @@ def main():
     with open(output_json_path, "w", encoding="utf-8") as f:
         json.dump(to_save, f, indent=4, ensure_ascii=False)
         logger.info(f"Saved final results to {output_json_path}")
+
 
 if __name__ == "__main__":
     main()

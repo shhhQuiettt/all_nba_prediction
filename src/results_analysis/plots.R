@@ -51,7 +51,6 @@ ggsave(
 )
 
 
-
 ggplot(df, aes(x = factor(min_train_season), y = total_score_2026)) +
   geom_violin(fill = "steelblue", alpha = 0.6, trim = FALSE, color = NA) +
   geom_jitter(width = 0.15, alpha = 0.4, color = "darkblue", size = 1.2) +
@@ -94,7 +93,7 @@ classifier_distributions
 ggsave(
   "report/plots/classifier_distributions.png",
   classifier_distributions,
-  width = save_width-2,
+  width = save_width - 2,
   height = save_height,
   dpi = 300,
 )
@@ -115,7 +114,6 @@ ggplot(
     x = "Classifier",
     y = "Total Score 2026"
   )
-
 
 
 #### Regressor
@@ -164,7 +162,7 @@ regressor_distributions
 ggsave(
   "report/plots/regressor_distributions.png",
   regressor_distributions,
-  width = save_width-2,
+  width = save_width - 2,
   height = save_height,
   dpi = 300,
 )
@@ -173,9 +171,16 @@ ggsave(
 
 combo_summary <- df %>%
   group_by(classifier, regressor) %>%
-  summarize(median_score = median(total_score_2026), max_score = max(total_score_2026), .groups = "drop")
+  summarize(
+    median_score = median(total_score_2026),
+    max_score = max(total_score_2026),
+    .groups = "drop"
+  )
 
-combo_median = ggplot(combo_summary, aes(x = regressor, y = classifier, fill = median_score)) +
+combo_median = ggplot(
+  combo_summary,
+  aes(x = regressor, y = classifier, fill = median_score)
+) +
   geom_tile(color = "white", size = 0.5) +
   geom_text(aes(label = round(median_score, 1)), color = "black", size = 4) +
   scale_fill_viridis_c(direction = 1) +
@@ -201,7 +206,10 @@ ggsave(
   dpi = 300,
 )
 
-combo_max = ggplot(combo_summary, aes(x = regressor, y = classifier, fill = max_score)) +
+combo_max = ggplot(
+  combo_summary,
+  aes(x = regressor, y = classifier, fill = max_score)
+) +
   geom_tile(color = "white", size = 0.5) +
   geom_text(aes(label = round(max_score, 1)), color = "black", size = 4) +
   scale_fill_viridis_c(direction = 1) +

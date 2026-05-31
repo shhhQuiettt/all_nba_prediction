@@ -37,10 +37,11 @@ The predictive modeling approach is formulated as a _regression_ problem, where 
 ### Tackling Sparsity
 One of the problems with the data is the sparsity of votes. Almost _all_ players receive `0` votes, and only a small fraction of players receive any votes at all. This creates a highly imbalanced dataset, which can be challenging for traditional regression models to learn from effectively.
 
+![](report/plots/votes_distribution.png)
+
 To tackle this issue, a __hurdle regression__ approach is implemented. This involves first training a __binary classifier__ to predict probabilities whether a player receives any votes (i.e., whether they are nominated or not). Then, for the a separate regression model is trained to predict their vote share. This two-step process helps to mitigate the effects of sparsity and allows the model to focus on learning from the relevant subset of data.
 
 The comparison to a standard regression model is included in _Experiments_ section below.
-
 
 ## Data Acquisition
 Despite the official NBA stat API being available, the task of gathering data was very painstaking.

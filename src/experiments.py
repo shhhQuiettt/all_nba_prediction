@@ -34,7 +34,9 @@ experiments_setups = {
         HistGradientBoostingClassifier(random_state=0xC0FFEE),
         HistGradientBoostingClassifier(random_state=0xC0FFEE, class_weight="balanced"),
         LogisticRegression(random_state=0xC0FFEE, max_iter=3000),
-        LogisticRegression(random_state=0xC0FFEE, class_weight="balanced", max_iter=3000),
+        LogisticRegression(
+            random_state=0xC0FFEE, class_weight="balanced", max_iter=3000
+        ),
         RandomForestClassifier(random_state=0xC0FFEE),
         RandomForestClassifier(random_state=0xC0FFEE, class_weight="balanced"),
         DummyClassifier(),
@@ -98,15 +100,19 @@ def main():
         base_regressor=HistGradientBoostingRegressor(random_state=0xC0FFEE),
         min_train_season=2020,
     )
-    experiments_n = len(experiments_setups["min_train_season"]) * len(experiments_setups["clasifiers"]) * len(experiments_setups["regressors"])
-
+    experiments_n = (
+        len(experiments_setups["min_train_season"])
+        * len(experiments_setups["clasifiers"])
+        * len(experiments_setups["regressors"])
+    )
 
     for min_year, classifier, regressor in tqdm(
         product(
             experiments_setups["min_train_season"],
             experiments_setups["clasifiers"],
             experiments_setups["regressors"],
-        ), total=experiments_n
+        ),
+        total=experiments_n,
     ):
         config.min_train_season = min_year
         config.base_classifier = classifier

@@ -6,7 +6,6 @@ from pathlib import Path
 import os
 from curl_cffi import requests
 
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -65,8 +64,6 @@ for year in years:
             logger.info(f"No table ALL-NBA found in div for year {year}.")
     else:
         logger.info(f"No div with id '{div_id_old}' found for year {year}.")
-
-
 
     div_with_table_rookie = soup.find("div", id=div_id_rookie)
     if div_with_table_rookie:

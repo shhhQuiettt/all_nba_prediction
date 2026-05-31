@@ -57,9 +57,9 @@ class HurdleRegressor(BaseEstimator, RegressorMixin):
         mask = y_arr > 0
         self.reg_ = clone(self.regressor)
 
-        assert np.sum(mask) > 0, (
-            "There must be at least one positive sample to fit the regressor"
-        )
+        assert (
+            np.sum(mask) > 0
+        ), "There must be at least one positive sample to fit the regressor"
 
         self.reg_.fit(X[mask], y_arr[mask])
 
@@ -74,15 +74,14 @@ class HurdleRegressor(BaseEstimator, RegressorMixin):
         raw_predictions = self.reg_.predict(X)
 
         final_shares = probabilities * raw_predictions
-        # final_shares = raw_predictions
 
         return np.clip(final_shares, 0, 1)
 
 
 def create_pipeline(base_classifier, base_regressor, features, features_to_normalize):
-    assert set(features_to_normalize).issubset(set(features)), (
-        "Normalization features must be in the feature list"
-    )
+    assert set(features_to_normalize).issubset(
+        set(features)
+    ), "Normalization features must be in the feature list"
 
     return Pipeline(
         steps=[

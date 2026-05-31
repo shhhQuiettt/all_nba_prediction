@@ -2,16 +2,23 @@ import pandas as pd
 
 
 def validate_season(pipeline, X, y, is_rookie: bool) -> tuple[pd.DataFrame, int]:
-    assert X["YEAR"].nunique() == 1, f"Expected data for a single season, but got {X['YEAR'].nunique()} seasons"
+    assert (
+        X["YEAR"].nunique() == 1
+    ), f"Expected data for a single season, but got {X['YEAR'].nunique()} seasons"
     assert "PLAYER_NAME" in X.columns
     assert len(X) == len(y), "Mismatch in number of samples between X and y"
-    # assert player names are unique
-    assert X["PLAYER_NAME"].is_unique, f"Expected unique player names, but found duplicates: {X['PLAYER_NAME'][X['PLAYER_NAME'].duplicated()]}"
+    assert X[
+        "PLAYER_NAME"
+    ].is_unique, f"Expected unique player names, but found duplicates: {X['PLAYER_NAME'][X['PLAYER_NAME'].duplicated()]}"
 
     predicted_vote_shares = pipeline.predict(X)
 
     df_res = pd.DataFrame(
-            {"PLAYER_NAME": X["PLAYER_NAME"], "predicted_vote_share": predicted_vote_shares, "actual_vote_share": y}
+        {
+            "PLAYER_NAME": X["PLAYER_NAME"],
+            "predicted_vote_share": predicted_vote_shares,
+            "actual_vote_share": y,
+        }
     )
 
     df_res["predicted_place"] = (
@@ -24,7 +31,6 @@ def validate_season(pipeline, X, y, is_rookie: bool) -> tuple[pd.DataFrame, int]
         .rank(ascending=False, method="first")
         .apply(lambda r: assign_team(r, is_rookie=is_rookie))
     )
-
 
     score = calculate_score(df_res["predicted_place"], df_res["actual_place"])
 
