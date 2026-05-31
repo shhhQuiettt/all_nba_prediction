@@ -5,7 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "curl-cffi>=0.15.0",
+    "lightgbm>=4.6.0",
+    "lxml>=6.1.1",
     "matplotlib>=3.10.9",
     "nba-api>=1.11.4",
     "pandas>=3.0.3",
+    "scikit-learn>=1.8.0",
+    "tqdm>=4.67.3",
 ]
