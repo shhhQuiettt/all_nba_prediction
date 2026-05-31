@@ -2,7 +2,7 @@
 Krzysztof Skrobała 156039 
 
 ## Link to repository
-Code and rendered report can be founct on [GitHub](https://github.com/shhhQuiettt/all_nba_prediction) 
+Code and **rendered report** can be found on [GitHub](https://github.com/shhhQuiettt/all_nba_prediction) 
 
 ## Introduction
 This report details the implementation, and results of a predictive modeling project aimed at forecasting the end-of-season All-NBA and All-Rookie teams.
